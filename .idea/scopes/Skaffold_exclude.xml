@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Skaffold exclude" pattern="file[image-rec]:*/&amp;&amp;!file:skaffold.yaml" />
+</component>
