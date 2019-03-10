@@ -1,4 +1,4 @@
-package hello;
+package com.eshaul.imagerec;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
