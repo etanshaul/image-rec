@@ -2,7 +2,7 @@ apiVersion: skaffold/v1beta6
 kind: Config
 build:
   artifacts:
-  - image: gcr.io/eshaul-work/image-rec
+  - image: gcr.io/bookshelf-next-2019/image-rec
     jibMaven: {}
 deploy:
   kubectl:

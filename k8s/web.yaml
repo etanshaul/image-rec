@@ -1,30 +1,31 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: web
+  name: image-rec
 spec:
   ports:
   - port: 8080
     name: http
-  type: LoadBalancer
+#  type: NodePort
+#  loadBalancerIP: "35.235.117.242"
   selector:
-    app: web
+    app: image-rec
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: web
-spec:
-  selector:
-    matchLabels:
-      app: web
-  template:
-    metadata:
-      labels:
-        app: web
-    spec:
-      containers:
-      - name: web
-        image: gcr.io/eshaul-work/image-rec
-        ports:
-          - containerPort: 8080
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: image-rec
+#spec:
+#  selector:
+#    matchLabels:
+#      app: image-rec
+#  template:
+#    metadata:
+#      labels:
+#        app: image-rec
+#    spec:
+#      containers:
+#      - name: image-rec
+#        image: gcr.io/bookshelf-next-2019/image-rec
+#        ports:
+#          - containerPort: 8080
