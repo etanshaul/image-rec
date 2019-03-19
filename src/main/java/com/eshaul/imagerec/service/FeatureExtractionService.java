@@ -123,8 +123,6 @@ public class FeatureExtractionService {
         int ymin = Integer.MAX_VALUE;
         int ymax = Integer.MIN_VALUE;
 
-        System.out.println("num vertices: " + poly.getVerticesList().size());
-
         for (Vertex v : poly.getVerticesList()) {
             xmin = Math.min(v.getX(), xmin);
             xmax = Math.max(v.getX(), xmax);
