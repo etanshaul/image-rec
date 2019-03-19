@@ -24,24 +24,6 @@ public class ImageUploadController {
     @Autowired
     FeatureExtractionService featureExtractionService;
 
-    @GetMapping("/alive")
-    @ResponseStatus(HttpStatus.OK)
-    public void alive() { }
-
-    @GetMapping("/upload")
-    public String uploadEp(Model model) {
-        model.addAttribute("target", "upload");
-        return "upload";
-    }
-
-    @PostMapping("/upload")
-    @ResponseBody
-    public BookFeatures handleFileUpload(@RequestParam("file") MultipartFile file,
-                                         RedirectAttributes redirectAttributes) throws IOException {
-
-        return featureExtractionService.extractText(file.getInputStream());
-    }
-
     @GetMapping("/")
     public String image() {
         return "image";
@@ -53,11 +35,25 @@ public class ImageUploadController {
         URL url = new URL(input);
         BufferedImage image = ImageIO.read(url);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ImageIO.write(image,"jpg", os);
+        ImageIO.write(image, "jpg", os);
         InputStream fis = new ByteArrayInputStream(os.toByteArray());
 
         return featureExtractionService.extractText(fis);
     }
+
+//    @GetMapping("/upload")
+//    public String uploadEp(Model model) {
+//        model.addAttribute("target", "upload");
+//        return "upload";
+//    }
+//
+//    @PostMapping("/upload")
+//    @ResponseBody
+//    public BookFeatures handleFileUpload(@RequestParam("file") MultipartFile file,
+//                                         RedirectAttributes redirectAttributes) throws IOException {
+//
+//        return featureExtractionService.extractText(file.getInputStream());
+//    }
 
     @GetMapping("/debug")
     public String debug(Model model) {
@@ -79,5 +75,11 @@ public class ImageUploadController {
         }
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
+
+    @GetMapping("/alive")
+    @ResponseStatus(HttpStatus.OK)
+    public void alive() {
+    }
+
 }
 
