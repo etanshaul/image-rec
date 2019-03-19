@@ -75,8 +75,7 @@ public class FeatureExtractionService {
     }
 
     private BookFeatures getBookFeatures(Map<BoundingPoly, String> polyStringMap) {
-//        polyStringMap.keySet().stream().map(boundingPoly -> computePolyArea(boundingPoly));
-        BoundingPoly titlePoly = polyStringMap.keySet().stream().max(Comparator.comparingInt(this::computePolyArea)).orElse(null);
+        BoundingPoly titlePoly = polyStringMap.keySet().stream().min(Comparator.comparingInt(this::computePolyArea)).orElse(null);
 
         return new BookFeatures(polyStringMap.get(titlePoly), "todo:description", "todo:author", "todo:date");
     }
