@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: image-rec
+spec:
+  ports:
+  - port: 8080
+    name: http
+  selector:
+    app: image-rec
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-rec
+spec:
+  selector:
+    matchLabels:
+      app: image-rec
+  template:
+    metadata:
+      labels:
+        app: image-rec
+    spec:
+      volumes:
+        - name: google-cloud-key
+          secret:
+            secretName: vision-sa
+      containers:
+      - name: image-rec
+        image: gcr.io/bookshelf-next-2019/image-rec
+        ports:
+          - containerPort: 8080
+        volumeMounts:
+          - mountPath: /var/secrets/google
+            name: google-cloud-key
+        env:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /var/secrets/google/key.json

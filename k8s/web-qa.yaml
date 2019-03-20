@@ -21,19 +21,9 @@ spec:
     metadata:
       labels:
         app: image-rec
-#    spec:
-#      volumes:
-#        - name: google-cloud-key
-#          secret:
-#            secretName: vision-sa
+    spec:
       containers:
       - name: image-rec
         image: gcr.io/bookshelf-next-2019/image-rec
         ports:
           - containerPort: 8080
-#        volumeMounts:
-#          - mountPath: /var/secrets/google
-#            name: google-cloud-key
-#        env:
-#          - name: GOOGLE_APPLICATION_CREDENTIALS
-#            value: /var/secrets/google/key.json
