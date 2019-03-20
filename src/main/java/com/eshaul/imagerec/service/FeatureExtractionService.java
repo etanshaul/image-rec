@@ -1,6 +1,11 @@
 package com.eshaul.imagerec.service;
 
 import com.eshaul.imagerec.domain.BookFeatures;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.books.Books;
+import com.google.api.services.books.model.Volume;
+import com.google.api.services.books.model.Volumes;
 import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.*;
 import com.google.common.collect.Lists;
@@ -12,8 +17,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 @Service
 public class FeatureExtractionService {
@@ -77,8 +82,7 @@ public class FeatureExtractionService {
     private BookFeatures getBookFeatures(Map<BoundingPoly, String> polyStringMap) {
         BoundingPoly titlePoly = polyStringMap.keySet().stream().max(Comparator.comparingInt(this::computePolyArea)).orElse(null);
 
-        // TODO extract remaining features / call book API
-        return new BookFeatures(polyStringMap.get(titlePoly), "todo:description", "todo:author", "todo:date");
+        return getBookAttributesFrom(polyStringMap.get(titlePoly));
     }
 
 
@@ -130,5 +134,41 @@ public class FeatureExtractionService {
         }
 
         return (xmax - xmin) * (ymax - ymin);
+    }
+
+    private BookFeatures getBookAttributesFrom(String title) {
+        try {
+            BookFeatures bookFeatures = new BookFeatures(title);
+
+            String query = "--title " + title;
+            final Books books = new Books.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), null)
+                    .setApplicationName("")
+//                .setGoogleClientRequestInitializer(new BooksRequestInitializer(ClientCredentials.API_KEY))
+                    .build();
+            // Set query string and filter only Google eBooks.
+            System.out.println("Query: [" + query + "]");
+            com.google.api.services.books.Books.Volumes.List volumesList = books.volumes().list(query);
+            volumesList.setFilter("ebooks");
+            System.out.println(volumesList.size());
+
+            // Execute the query.
+            Volumes volumes = volumesList.execute();
+            if (volumes.getTotalItems() == 0 || volumes.getItems() == null) {
+                System.out.println("No matches found.");
+                return null;
+            }
+
+            if (volumes.size() > 0) {
+                Volume.VolumeInfo volumeInfo = volumes.getItems().get(0).getVolumeInfo();
+                bookFeatures.setDescription(volumeInfo.getSubtitle());
+                bookFeatures.setAuthor(String.join(",", volumeInfo.getAuthors()));
+                bookFeatures.setPublishedDate(volumeInfo.getPublishedDate());
+            }
+
+            return bookFeatures;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
