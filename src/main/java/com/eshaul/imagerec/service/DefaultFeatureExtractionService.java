@@ -106,7 +106,7 @@ public class DefaultFeatureExtractionService implements FeatureExtractionService
 
         Graphics2D gfx = image.createGraphics();
         gfx.setStroke(new BasicStroke(5));
-        gfx.setColor(new Color(0xff0000));
+        gfx.setColor(new Color(0x00ff00));
 
         for (BoundingPoly poly : polys) {
             Polygon jpoly = new Polygon();
