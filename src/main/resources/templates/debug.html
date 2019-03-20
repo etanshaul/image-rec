@@ -1,0 +1,29 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+
+<div>
+    <form method="POST" enctype="multipart/form-data" action="/debug">
+        <table>
+            <tr><td>Select a book image:</td><td><input type="file" name="file" /></td></tr>
+            <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+        </table>
+    </form>
+</div>
+    <pre th:if="${json != null}" id="json">
+    </pre>
+
+<div th:if="${json != null}">
+    <img th:src="'data:image/jpg;base64, ' + ${image}" />
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var features = /*[[${json}]]*/ 'default';
+    document.getElementById("json").innerHTML = JSON.stringify(JSON.parse(features), undefined, 2);
+
+    /*]]>*/
+</script>
+</body>
+</html>

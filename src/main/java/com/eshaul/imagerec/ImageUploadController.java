@@ -2,32 +2,27 @@ package com.eshaul.imagerec;
 
 import com.eshaul.imagerec.domain.BookFeatures;
 import com.eshaul.imagerec.service.FeatureExtractionService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.grpc.internal.IoUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
+import java.util.Base64;
 
 @Controller
 public class ImageUploadController {
 
     @Autowired
     FeatureExtractionService featureExtractionService;
-
-    @GetMapping("/")
-    public String image() {
-        return "image";
-    }
 
     @GetMapping("/image")
     @ResponseBody
@@ -41,30 +36,21 @@ public class ImageUploadController {
         return featureExtractionService.extractText(fis);
     }
 
-//    @GetMapping("/upload")
-//    public String uploadEp(Model model) {
-//        model.addAttribute("target", "upload");
-//        return "upload";
-//    }
-//
-//    @PostMapping("/upload")
-//    @ResponseBody
-//    public BookFeatures handleFileUpload(@RequestParam("file") MultipartFile file,
-//                                         RedirectAttributes redirectAttributes) throws IOException {
-//
-//        return featureExtractionService.extractText(file.getInputStream());
-//    }
-
     @GetMapping("/debug")
-    public String debug(Model model) {
-        model.addAttribute("target", "debug");
-        return "upload";
+    public String debug() {
+        return "debug";
     }
 
     @PostMapping("/debug")
-    @ResponseBody
-    public ResponseEntity<byte[]> debug(@RequestParam("file") MultipartFile file,
-                                        RedirectAttributes redirectAttributes) throws IOException {
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        BookFeatures features = featureExtractionService.extractText(file.getInputStream());
+        model.addAttribute("json", mapper.writeValueAsString(features));
+        model.addAttribute("image", Base64.getEncoder().encodeToString(getImage(file)));
+        return "debug";
+    }
+
+    private byte[] getImage(MultipartFile file) {
         FileInputStream image = null;
         byte[] imageBytes = null;
         try {
@@ -73,7 +59,7 @@ public class ImageUploadController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+        return imageBytes;
     }
 
     @GetMapping("/alive")
