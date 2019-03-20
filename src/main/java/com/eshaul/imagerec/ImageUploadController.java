@@ -4,8 +4,8 @@ import com.eshaul.imagerec.domain.BookFeatures;
 import com.eshaul.imagerec.service.FeatureExtractionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.grpc.internal.IoUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +21,14 @@ import java.util.Base64;
 @Controller
 public class ImageUploadController {
 
+
+    private FeatureExtractionService featureExtractionService;
+
     @Autowired
-    FeatureExtractionService featureExtractionService;
+    @Qualifier("test")
+    public void setFeatureExtractionService(FeatureExtractionService featureExtractionService) {
+        this.featureExtractionService = featureExtractionService;
+    }
 
     @GetMapping("/image")
     @ResponseBody
@@ -46,7 +52,11 @@ public class ImageUploadController {
         ObjectMapper mapper = new ObjectMapper();
         BookFeatures features = featureExtractionService.extractText(file.getInputStream());
         model.addAttribute("json", mapper.writeValueAsString(features));
-        model.addAttribute("image", Base64.getEncoder().encodeToString(getImage(file)));
+
+        byte[] annotatedImageByteArray = getImage(file);
+        if (annotatedImageByteArray != null) {
+            model.addAttribute("image", Base64.getEncoder().encodeToString(annotatedImageByteArray));
+        }
         return "debug";
     }
 
