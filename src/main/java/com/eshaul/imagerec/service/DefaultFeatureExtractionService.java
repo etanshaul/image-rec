@@ -145,7 +145,6 @@ public class DefaultFeatureExtractionService implements FeatureExtractionService
             String query = "--title " + title;
             final Books books = new Books.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), null)
                     .setApplicationName("")
-//                .setGoogleClientRequestInitializer(new BooksRequestInitializer(ClientCredentials.API_KEY))
                     .build();
             // Set query string and filter only Google eBooks.
             System.out.println("Query: [" + query + "]");
@@ -162,7 +161,7 @@ public class DefaultFeatureExtractionService implements FeatureExtractionService
 
             if (volumes.size() > 0) {
                 Volume.VolumeInfo volumeInfo = volumes.getItems().get(0).getVolumeInfo();
-                bookFeatures.setDescription(volumeInfo.getDescription() == null ? volumeInfo.getSubtitle() : volumeInfo.getDescription());
+                bookFeatures.setDescription(volumeInfo.getSubtitle());
                 bookFeatures.setAuthor(String.join(",", volumeInfo.getAuthors()));
                 bookFeatures.setPublishedDate(volumeInfo.getPublishedDate());
             }
