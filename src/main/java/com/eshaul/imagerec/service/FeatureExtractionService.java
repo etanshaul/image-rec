@@ -160,7 +160,7 @@ public class FeatureExtractionService {
 
             if (volumes.size() > 0) {
                 Volume.VolumeInfo volumeInfo = volumes.getItems().get(0).getVolumeInfo();
-                bookFeatures.setDescription(volumeInfo.getSubtitle());
+                bookFeatures.setDescription(volumeInfo.getDescription() == null ? volumeInfo.getSubtitle() : volumeInfo.getDescription());
                 bookFeatures.setAuthor(String.join(",", volumeInfo.getAuthors()));
                 bookFeatures.setPublishedDate(volumeInfo.getPublishedDate());
             }
