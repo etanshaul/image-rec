@@ -25,7 +25,7 @@ public class ImageUploadController {
     private FeatureExtractionService featureExtractionService;
 
     @Autowired
-    @Qualifier("test")
+    @Qualifier("default")
     public void setFeatureExtractionService(FeatureExtractionService featureExtractionService) {
         this.featureExtractionService = featureExtractionService;
     }
