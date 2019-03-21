@@ -47,6 +47,11 @@
             <version>4.4.8</version>
         </dependency>
         <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-core</artifactId>
+            <version>1.19.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-books</artifactId>
             <version>v1-rev93-1.23.0</version>
