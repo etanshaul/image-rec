@@ -5,19 +5,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 
 @Service
 @Qualifier("test")
 public class TestFeatureExtractionService implements FeatureExtractionService {
     @Override
-    public BookFeatures extractText(InputStream input) throws IOException {
+    public BookFeatures extractText(InputStream input) {
         return new BookFeatures("title", "description", "author", "publishedDate");
     }
 
     @Override
-    public File getFeatureBoundingBox(InputStream input) throws IOException {
+    public File getFeatureBoundingBox(InputStream input) {
         return new File("");
     }
 }
