@@ -1,4 +1,4 @@
-apiVersion: skaffold/v1beta6
+apiVersion: skaffold/v1beta7
 kind: Config
 build:
   artifacts:
@@ -14,3 +14,8 @@ profiles:
   - name: gcb
     build:
       googleCloudBuild: {}
+  - name: qa
+    deploy:
+      kubectl:
+        manifests:
+          - k8s/web-qa.yaml
