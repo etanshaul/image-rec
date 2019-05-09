@@ -6,6 +6,17 @@
     <artifactId>image-rec</artifactId>
     <version>0.1.0</version>
     <description>Book image feature extraction</description>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.cloud</groupId>
+                <artifactId>google-cloud-bom</artifactId>
+                <version>0.87.0-alpha</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <properties>
         <java.version>1.8</java.version>
@@ -55,6 +66,10 @@
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-books</artifactId>
             <version>v1-rev93-1.23.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-vision</artifactId>
         </dependency>
     </dependencies>
 
