@@ -24,6 +24,6 @@ spec:
     spec:
       containers:
       - name: image-rec
-        image: gcr.io/bookshelf-next-2019/image-rec
+        image: gcr.io/kubecon-china-2019/image-rec
         ports:
           - containerPort: 8080
