@@ -162,7 +162,8 @@ public class DefaultFeatureExtractionService implements FeatureExtractionService
             if (volumes.size() > 0) {
                 Volume.VolumeInfo volumeInfo = volumes.getItems().get(0).getVolumeInfo();
                 bookFeatures.setDescription(volumeInfo.getSubtitle());
-                bookFeatures.setAuthor(String.join(",", volumeInfo.getAuthors()));
+                bookFeatures.setAuthor(volumeInfo.getAuthors() != null ?
+                        String.join(",", volumeInfo.getAuthors()) : "");
                 bookFeatures.setPublishedDate(volumeInfo.getPublishedDate());
             }
 
